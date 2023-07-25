@@ -8,7 +8,7 @@ Created on Tue Jul 25 10:29:05 2023
 from tkinter import *
 import tkinter.messagebox as box
 
-col_bg = "#c5e3dd" # Background Col
+col_bg = "#ffffff" # Background Col
 col_fg = "#45474a" # Foreground Col
 col_im = "#55bac9" # Important col
 col_bt = "#629e80" # Button Col
@@ -79,8 +79,8 @@ class Example(Frame):
 
     def centerWindow(self):
 
-        w = 290
-        h = 150
+        w = 500
+        h = 400
 
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
@@ -88,32 +88,39 @@ class Example(Frame):
         x = (sw - w)/2
         y = (sh - h)/2
         self.parent.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        
+        img = PhotoImage(file="img.png")
+        img = img.subsample(2, 2)
+        label = Label(self, image = img)
+        label.image = img
+        label.grid(row=1, column=1, columnspan = 5)
+
         quitButton = Button(self, text="Quit", fg=col_im, bg=col_fg,
             command=self.onQuest)
-        quitButton.place(x=250, y=120)
+        quitButton.grid(row=5, column=5)
 
         inform = Button(self, text="Calculate", fg=col_fg, bg=col_bt,
                         command=lambda: valueGET(inputs_r_sp.get(), r_sp.get(), inputs_c_sp.get(), c_sp.get()))
-        inform.place(x=5, y=120)
+        inform.grid(row=5, column=1)
 
         r_sp = StringVar(self)
         r_sp.set("cm") # initial value
         lable_r_sp = Label(self, text="Row spacing", fg=col_fg, bg=col_bg)
-        lable_r_sp.grid(row=1, column=1)
+        lable_r_sp.grid(row=2, column=1)
         inputs_r_sp = Entry(self, bd =1, fg=col_et, bg=col_eb, width=8)
-        inputs_r_sp.grid(row=1, column=2)
+        inputs_r_sp.grid(row=2, column=2)
         opt_r_sp = OptionMenu(self, r_sp, "mm", "cm", "m", "km", "inch", "foot", "yard","rod")
-        opt_r_sp.grid(row=1, column=3)
+        opt_r_sp.grid(row=2, column=3)
         opt_r_sp.config(bd=2, fg=col_fg, bg=col_bt)
 
         c_sp = StringVar(self)
         c_sp.set("cm") # initial value
         lable_c_sp = Label(self, text="Column spacing", fg=col_fg, bg=col_bg)
-        lable_c_sp.grid(row=2, column=1)
+        lable_c_sp.grid(row=3, column=1)
         inputs_c_sp = Entry(self, bd =1, fg=col_et, bg=col_eb, width=8)
-        inputs_c_sp.grid(row=2, column=2)
+        inputs_c_sp.grid(row=3, column=2)
         opt_c_sp = OptionMenu(self, c_sp, "mm", "cm", "m", "km", "inch", "foot", "yard","rod")
-        opt_c_sp.grid(row=2, column=3)
+        opt_c_sp.grid(row=3, column=3)
         opt_c_sp.config(bd=2, fg=col_fg, bg=col_bt)
 
 
