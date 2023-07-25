@@ -8,12 +8,12 @@ Created on Tue Jul 25 10:29:05 2023
 from tkinter import *
 import tkinter.messagebox as box
 
-col_bg = "#EEEEDB" # Background Col
-col_fg = "#003b6f" # Foreground Col
-col_im = "#da635d" # Important col
-col_bt = "#088DA5" # Button Col
-col_et = "#000b16" # Entry text
-col_eb = "#DEDEB8" # Entry Background
+col_bg = "#c5e3dd" # Background Col
+col_fg = "#45474a" # Foreground Col
+col_im = "#55bac9" # Important col
+col_bt = "#629e80" # Button Col
+col_et = "#414540" # Entry text
+col_eb = "#96ab91" # Entry Background
 
 
 def ppm2(row,col):
