@@ -50,6 +50,33 @@ def ppm2(row,col):
     ppm = 1/(float(row)*float(col))
     return ppm
 
+def get_decimal_places(value):
+    magnitude = abs(value)
+    if magnitude >= 1000:
+        return 0
+    elif magnitude >= 1:
+        return 2
+    else:
+        return 4
+
+def convert(value,unit_type):
+    converted = {}
+    if unit_type in conversion_factors_length:
+        for unit, factor in conversion_factors_length.items():
+            converted[unit] = value / factor
+    else:
+        for unit, factor in conversion_factors_density.items():
+            converted[unit] = value / factor
+        
+    return converted
+
+def print_units(text,values,units_in):
+    out = "" 
+    new_lengths = convert(values,units_in)
+    for unit, length in new_lengths.items():
+        decimals = get_decimal_places(length)
+        out = out + "\n" + f"{text}: {length :,.{decimals}f} {unit}"
+    return out
 
 def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
     if ppm.strip() == "":
@@ -57,16 +84,16 @@ def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
         col = float(col) * conversion_factors_length[col_u]
         
         a_ppm = ppm2(row, col)
-        a_pha = a_ppm * 10000
-        a_ppa = a_ppm * 4047
 
-        return f"Density: {a_ppm:,.2f} Plants per m2\nDensity: {a_pha:,.0f} Plants per ha\nDensity: {a_ppa:,.0f} Plants per acre"
+        prt = print_units("Density",a_ppm,col_u)
+        return prt
     
     elif row.strip() == "" and col.strip() == "":
         a_ppm = float(ppm)*conversion_factors_density[ppm_u]
         suggested_spacing = spacing_from_ppm(a_ppm)
-        
-        return f"Suggested spacing: {suggested_spacing:.2f} m X {suggested_spacing:.2f} m"
+
+        prt = print_units("Suggested spacing",suggested_spacing,ppm_u)
+        return prt
     
     else:
         a_ppm = float(ppm)*conversion_factors_density[ppm_u]
@@ -74,12 +101,15 @@ def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
 
         try:
             other = float(row) * conversion_factors_length[row_u]
+            other_u = row_u
         except ValueError:
             other = float(col) * conversion_factors_length[col_u]
+            other_u = col_u
 
         suggested_spacing = spacing_rect_from_ppm(a_ppm,other)
-        
-        return f"Suggested spacing: {other} m X {suggested_spacing:.2f} m"
+
+        prt = print_units(str(other)+other_u+" x ",suggested_spacing,other_u)
+        return prt
     
 
 
@@ -94,7 +124,7 @@ class Example(Frame):
         
     def centerWindow(self):
         w = 430
-        h = 520
+        h = 720
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
         x = (sw - w) / 2
