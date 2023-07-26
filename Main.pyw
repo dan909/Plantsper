@@ -15,6 +15,17 @@ col_bt = "#629e80" # Button Col
 col_et = "#414540" # Entry text
 col_eb = "#96ab91" # Entry Background
 
+conversion_factors = {
+    "mm": 0.001,
+    "cm": 0.01,
+    "m": 1,
+    "km": 1000,
+    "inch": 0.0254,
+    "foot": 0.3048,
+    "yard": 0.9144,
+    "rod": 5.0292
+}
+
 
 def ppm2(row,col):
     ppm = 1/(float(row)*float(col))
@@ -40,17 +51,6 @@ def conv_m(value, unit):
         box.showerror("A Very Basic Error", "Please enter a valid number!\nnot " + str(value) + "?!")
         return None
     
-    conversion_factors = {
-        "mm": 0.001,
-        "cm": 0.01,
-        "m": 1,
-        "km": 1000,
-        "inch": 0.0254,
-        "foot": 0.3048,
-        "yard": 0.9144,
-        "rod": 5.0292
-    }
-
     return float(value) * conversion_factors[unit]
     
 
@@ -77,22 +77,23 @@ class Example(Frame):
         self.centerWindow()
 
     def centerWindow(self):
-
-        w = 430
-        h = 390
-
+        w = 435
+        h = 430
         sw = self.parent.winfo_screenwidth()
         sh = self.parent.winfo_screenheight()
-
-        x = (sw - w)/2
-        y = (sh - h)/2
+        x = (sw - w) / 2
+        y = (sh - h) / 2
         self.parent.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        self.create_widgets()
         
+
+    def create_widgets(self):
         img = PhotoImage(file="img.png")
         img = img.subsample(2, 2)
         label = Label(self, image = img)
         label.image = img
-        label.grid(row=1, column=1, columnspan = 5)
+        label.grid(row=1, column=1, columnspan = 5, pady=10)
 
         quit_button = Button(self, text="Quit", fg=col_im, bg=col_fg,
             command=self.onQuest)
@@ -105,21 +106,21 @@ class Example(Frame):
         r_sp = StringVar(self)
         r_sp.set("cm") # initial value
         lable_r_sp = Label(self, text="Row spacing", fg=col_fg, bg=col_bg)
-        lable_r_sp.grid(row=2, column=1)
+        lable_r_sp.grid(row=2, column=1, padx=5, pady=5, sticky=E)
         inputs_r_sp = Entry(self, bd =1, fg=col_et, bg=col_eb, width=8)
-        inputs_r_sp.grid(row=2, column=2)
-        opt_r_sp = OptionMenu(self, r_sp, "mm", "cm", "m", "km", "inch", "foot", "yard","rod")
-        opt_r_sp.grid(row=2, column=3)
+        inputs_r_sp.grid(row=2, column=2, padx=5, pady=5, sticky=W)
+        opt_r_sp = OptionMenu(self, r_sp, *conversion_factors.keys())
+        opt_r_sp.grid(row=2, column=3, padx=5, pady=5, sticky=W)
         opt_r_sp.config(bd=2, fg=col_fg, bg=col_bt)
 
         c_sp = StringVar(self)
         c_sp.set("cm") # initial value
         lable_c_sp = Label(self, text="Column spacing", fg=col_fg, bg=col_bg)
-        lable_c_sp.grid(row=3, column=1)
+        lable_c_sp.grid(row=3, column=1, padx=5, pady=5, sticky=E)
         inputs_c_sp = Entry(self, bd =1, fg=col_et, bg=col_eb, width=8)
-        inputs_c_sp.grid(row=3, column=2)
-        opt_c_sp = OptionMenu(self, c_sp, "mm", "cm", "m", "km", "inch", "foot", "yard","rod")
-        opt_c_sp.grid(row=3, column=3)
+        inputs_c_sp.grid(row=3, column=2, padx=5, pady=5, sticky=W)
+        opt_c_sp = OptionMenu(self, c_sp, *conversion_factors.keys())
+        opt_c_sp.grid(row=3, column=3, padx=5, pady=5, sticky=W)
         opt_c_sp.config(bd=2, fg=col_fg, bg=col_bt)
 
 
