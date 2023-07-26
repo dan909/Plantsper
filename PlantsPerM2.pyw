@@ -54,18 +54,6 @@ def conv_m(value, unit):
     return float(value) * conversion_factors[unit]
     
 
-def calculate_values(row, rowu, col, colu, self):
-    row = conv_m(row,rowu)
-    col = conv_m(col,colu)
-
-    if row is not None and col is not None:
-        ppm = ppm2(row, col)
-        pha = ppm * 10000
-        ppa = ppm * 4047
-
-        result_text = "Plants per m2 = {:20,.2f}\nPlants per ha = {:20,.0f}\nPlants per acre = {:20,.0f}\n".format(ppm, pha, ppa)
-        self.result_label.config(text=result_text)
-
 class Example(Frame):
 
     def __init__(self, parent):
@@ -100,7 +88,7 @@ class Example(Frame):
         quit_button.grid(row=5, column=5, pady=5, padx=5, sticky=E)
 
         calculate_button = Button(self, text="Calculate", fg=col_fg, bg=col_bt,
-                                  command=lambda: calculate_values(inputs_r_sp.get(), r_sp.get(), inputs_c_sp.get(), c_sp.get(), self))
+                                  command=lambda: self.calculate_values(inputs_r_sp.get(), r_sp.get(), inputs_c_sp.get(), c_sp.get()))
         calculate_button.grid(row=5, column=1, pady=5, padx=5, sticky=W)
 
         r_sp = StringVar(self)
@@ -123,9 +111,20 @@ class Example(Frame):
         opt_c_sp.grid(row=3, column=3, padx=5, pady=5, sticky=W)
         opt_c_sp.config(bd=2, fg=col_fg, bg=col_bt)
 
-        self.result_label = Label(self, text="", fg=col_fg, bg=col_eb, justify=CENTER)
+        self.result_label = Label(self, text="", fg=col_eb, bg=col_bg, justify=CENTER)
         self.result_label.grid(row=6, column=0, columnspan=5, pady=10)
 
+    def calculate_values(self, row, rowu, col, colu):
+        row = conv_m(row,rowu)
+        col = conv_m(col,colu)
+
+        if row is not None and col is not None:
+            ppm = ppm2(row, col)
+            pha = ppm * 10000
+            ppa = ppm * 4047
+
+            result_text = "Plants per m2 = {:20,.2f}\nPlants per ha = {:20,.0f}\nPlants per acre = {:20,.0f}\n".format(ppm, pha, ppa)
+            self.result_label.config(text=result_text)
 
     def onQuest(self):
         result = box.askquestion("Quit", "Did you intend to Quit?")
