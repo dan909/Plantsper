@@ -32,39 +32,38 @@ def conv_m(value, unit):
     print(value)
     print(unit)
     
+    if value.strip() == "":
+        box.showerror("A Very Basic Error", "Please enter something!")
+        return None
+    
     if not_float(value):
-        box.showerror("A Very Basic Error", "You enterd: " + value + "\nYOU NEED TO ENTER NUMBERS!!") 
-    elif unit == "mm":
-        return float(value)/1000
-    elif unit == "cm":
-        return float(value)/100
-    elif unit == "m":
-        return float(value)
-    elif unit == "km":
-        return float(value)*1000
-    elif unit == "inch":
-        return float(value)/39.37
-    elif unit == "foot":
-        return float(value)/3.281
-    elif unit == "yard":
-        return float(value)/1.094
-    elif unit == "rod":
-        return float(value)/5.029
-    else:
-        box.showerror("A Very Basic Error", "Not a known unit?!") 
+        box.showerror("A Very Basic Error", "Please enter a valid number!\nnot " + str(value) + "?!")
+        return None
+    
+    conversion_factors = {
+        "mm": 0.001,
+        "cm": 0.01,
+        "m": 1,
+        "km": 1000,
+        "inch": 0.0254,
+        "foot": 0.3048,
+        "yard": 0.9144,
+        "rod": 5.0292
+    }
+
+    return float(value) * conversion_factors[unit]
     
 
-def valueGET(row, rowu, col, colu):
+def calculate_values(row, rowu, col, colu):
     row = conv_m(row,rowu)
     col = conv_m(col,colu)
-    
-    ppm = ppm2(row,col)
-    pha = ppm*10000
-    ppa = ppm*4047
 
-    
-    box.showinfo("Answer", 
-                 "Plants per m2 = {:20,.2f}\nPlants per ha = {:20,.0f}\nPlants per acre = {:20,.0f}\n".format(ppm, pha, ppa))
+    if row is not None and col is not None:
+        ppm = ppm2(row, col)
+        pha = ppm * 10000
+        ppa = ppm * 4047
+
+        box.showinfo("Answer", "Plants per m2 = {:20,.2f}\nPlants per ha = {:20,.0f}\nPlants per acre = {:20,.0f}\n".format(ppm, pha, ppa))
 
 
 class Example(Frame):
@@ -95,13 +94,13 @@ class Example(Frame):
         label.image = img
         label.grid(row=1, column=1, columnspan = 5)
 
-        quitButton = Button(self, text="Quit", fg=col_im, bg=col_fg,
+        quit_button = Button(self, text="Quit", fg=col_im, bg=col_fg,
             command=self.onQuest)
-        quitButton.grid(row=5, column=5)
+        quit_button.grid(row=5, column=5, pady=5, padx=5, sticky=E)
 
-        inform = Button(self, text="Calculate", fg=col_fg, bg=col_bt,
-                        command=lambda: valueGET(inputs_r_sp.get(), r_sp.get(), inputs_c_sp.get(), c_sp.get()))
-        inform.grid(row=5, column=1)
+        calculate_button = Button(self, text="Calculate", fg=col_fg, bg=col_bt,
+                                  command=lambda: calculate_values(inputs_r_sp.get(), r_sp.get(), inputs_c_sp.get(), c_sp.get()))
+        calculate_button.grid(row=5, column=1, pady=5, padx=5, sticky=W)
 
         r_sp = StringVar(self)
         r_sp.set("cm") # initial value
@@ -127,15 +126,15 @@ class Example(Frame):
     def onQuest(self):
         result = box.askquestion("Quit", "Did you intend to Quit?")
         if result == 'yes':
-            global root
-            root.quit()
-            root.destroy()
+            self.parent.quit()
+            self.parent.destroy()
         else:
             return True
 
 def main():
-    global root
     root = Tk()
+    root.option_add('*Font', 'Arial 12')  # Set default font size for the app
+    root.configure(background=col_fg)
     ex = Example(root)
     root.mainloop()
 
