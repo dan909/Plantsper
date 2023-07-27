@@ -85,19 +85,22 @@ def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
         
         a_ppm = ppm2(row, col)
 
-        prt = print_units("Density",a_ppm,col_u," Plants per")
+        prt = print_units("Density",a_ppm,"m2"," Plants per")
         return prt
     
     elif row.strip() == "" and col.strip() == "":
         a_ppm = float(ppm)*conversion_factors_density[ppm_u]
         suggested_spacing = spacing_from_ppm(a_ppm)
 
-        prt = print_units("Suggested spacing",suggested_spacing,ppm_u,"")
+        prt = print_units("Suggested spacing",suggested_spacing,"m","")
         return prt
     
     else:
         a_ppm = float(ppm)*conversion_factors_density[ppm_u]
         suggested_spacing = spacing_from_ppm(a_ppm)
+
+        if row.strip() != "" and col.strip() != "":
+            return "error - one must be blank"
 
         try:
             other = float(row) * conversion_factors_length[row_u]
