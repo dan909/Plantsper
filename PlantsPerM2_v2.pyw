@@ -70,12 +70,12 @@ def convert(value,unit_type):
         
     return converted
 
-def print_units(text,values,units_in):
+def print_units(text,values,units_in,extra_text):
     out = "" 
     new_lengths = convert(values,units_in)
     for unit, length in new_lengths.items():
         decimals = get_decimal_places(length)
-        out = out + "\n" + f"{text}: {length :,.{decimals}f} {unit}"
+        out = out + "\n" + f"{text}: {length :,.{decimals}f}{extra_text} {unit}"
     return out
 
 def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
@@ -85,14 +85,14 @@ def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
         
         a_ppm = ppm2(row, col)
 
-        prt = print_units("Density",a_ppm,col_u)
+        prt = print_units("Density",a_ppm,col_u," Plants per")
         return prt
     
     elif row.strip() == "" and col.strip() == "":
         a_ppm = float(ppm)*conversion_factors_density[ppm_u]
         suggested_spacing = spacing_from_ppm(a_ppm)
 
-        prt = print_units("Suggested spacing",suggested_spacing,ppm_u)
+        prt = print_units("Suggested spacing",suggested_spacing,ppm_u,"")
         return prt
     
     else:
@@ -108,7 +108,7 @@ def make_result_text(row,row_u,col,col_u,ppm,ppm_u):
 
         suggested_spacing = spacing_rect_from_ppm(a_ppm,other)
 
-        prt = print_units(str(other)+other_u+" x ",suggested_spacing,other_u)
+        prt = print_units(str(other)+other_u+" x ",suggested_spacing,other_u,"")
         return prt
     
 
