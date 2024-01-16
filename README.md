@@ -14,9 +14,6 @@ Plantsper is a simple Tkinter-based Python application that allows you to calcul
 
 ## Introduction
 
-Certainly! If you prefer a more straightforward and concise introduction, here's an updated version for the README.md file:
-
-Introduction
 Plantsper is a Tkinter-based Python application that allows you to calculate plant densities and spacing effortlessly. 
 Whenever you need plant density information, this app provides a user-friendly interface for all your calculations. 
 It supports metric and imperial units, allowing you to work with the measurement system you need.
